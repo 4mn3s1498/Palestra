@@ -2,10 +2,10 @@
 from flask import Blueprint, request, jsonify
 from database import Database
 
-iscritto_bp = Blueprint("iscritto", __name__)
+iscritti_bp = Blueprint("iscritti", __name__)
 
 
-@iscritto_bp.route("/iscritti", methods=["POST"])
+@iscritti_bp.route("/iscritti", methods=["POST"])
 def creaIscritto():
     dati = request.get_json()
 

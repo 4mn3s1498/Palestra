@@ -1,0 +1,39 @@
+
+from flask import Blueprint, request, jsonify
+from database import Database
+
+turno_bp = Blueprint("turno", __name__)
+
+@turno_bp.route("/turni", methods=["POST"])
+def turno():
+    dati = request.get_json()
+
+    if not dati:
+        return jsonify({"errore": "JSON mancante o non valido"}), 400
+
+    giorno = dati.get("giorno")
+    oraInizio = dati.get("oraInizio")
+    oraFine = dati.get("oraFine")
+    idAllenatore = dati.get("idAllenatore")
+
+    if not giorno or not oraInizio or not oraFine or not idAllenatore:
+        return jsonify({
+            "errore": "Giorno, orari e ID allenatore sono obbligatori"
+        }), 400
+
+    db = Database()
+
+    try:
+        risultato = db.inserisci_turno(
+            giorno, oraInizio, oraFine, idAllenatore
+        )
+        return jsonify(risultato), 201
+
+    except ValueError as errore:
+        return jsonify({"errore": str(errore)}), 404
+
+    except Exception as errore:
+        print(errore)
+        return jsonify({
+            "errore": "Errore durante la creazione del turno"
+        }), 500

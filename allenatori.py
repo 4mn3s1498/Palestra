@@ -3,7 +3,7 @@ from database import Database
 
 allenatore_bp = Blueprint("allenatore", __name__)
 
-@allenatore_bp.route("/allenatori", methods=["POST"])
+@allenatore_bp.route("/allenatore", methods=["POST"])
 def creaAllenatore():
     dati = request.get_json()
     nome = dati.get("nome")
