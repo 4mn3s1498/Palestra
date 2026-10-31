@@ -37,3 +37,17 @@ def turno():
         return jsonify({
             "errore": "Errore durante la creazione del turno"
         }), 500
+
+@turno_bp.route("/turni", methods=["GET"])
+def getTurni():
+    db = Database() 
+    risultato = db.get_turni()
+    return jsonify(risultato), 200  
+
+@turno_bp.route("/turni/<int:id>", methods=["GET"])
+def getTurnoId(id):
+    db = Database() 
+    risultato = db.get_turno_id(id)
+    if risultato is None:
+        return jsonify({"errore": "Turno non trovato"}), 404
+    return jsonify(risultato), 200   

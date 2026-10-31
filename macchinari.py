@@ -26,3 +26,17 @@ def creaMacchinario():
     except Exception as errore:
         print(errore)
         return jsonify({"errore": "Errore durante la creazione del macchinario"}), 500
+
+@macchinario_bp.route("/macchinario", methods=["GET"])
+def getMacchinari():
+    db = Database() 
+    risultato = db.get_macchinari()
+    return jsonify(risultato), 200  
+
+@macchinario_bp.route("/macchinario/<int:id>", methods=["GET"])
+def getMacchinarioId(id):
+    db = Database() 
+    risultato = db.get_macchinario_id(id)
+    if risultato is None:
+        return jsonify({"errore": "Macchinario non trovato"}), 404
+    return jsonify(risultato), 200        

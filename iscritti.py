@@ -26,3 +26,18 @@ def creaIscritto():
         return jsonify(risultato), 201
     except Exception:
         return jsonify({"errore": "Errore durante la creazione dell'iscritto"}), 500
+
+@iscritti_bp.route("/iscritti", methods=["GET"])
+def getIscritti():
+    db = Database()
+    risultato=db.get_iscritti() 
+    return jsonify(risultato), 200
+
+@iscritti_bp.route("/iscritti/<int:id>", methods=["GET"])
+def getIscritto(id):
+    db = Database() 
+    risultato = db.get_iscrittoId(id)
+    if risultato is None:
+        return jsonify({"errore": "Iscritto non trovato"}), 404
+
+    return jsonify(risultato), 200

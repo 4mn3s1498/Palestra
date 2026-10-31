@@ -22,3 +22,18 @@ def creaAllenatore():
     except Exception as errore:
         print(errore)
         return jsonify({"errore": "Errore durante la creazione dell'allenatore"}), 500
+
+
+@allenatore_bp.route("/allenatori", methods=["GET"])
+def getAllenatori():
+    db = Database() 
+    risultato = db.get_allenatori()
+    return jsonify(risultato), 200  
+
+@allenatore_bp.route("/allenatori/<int:id>", methods=["GET"])
+def getAllenatoreId(id):
+    db = Database() 
+    risultato = db.get_allenatore_id(id)
+    if risultato is None:
+        return jsonify({"errore": "Allenatore non trovato"}), 404
+    return jsonify(risultato), 200        

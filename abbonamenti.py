@@ -1,4 +1,3 @@
-
 from flask import Blueprint, request, jsonify
 from database import Database
 
@@ -31,3 +30,17 @@ def abbonamento():
     except Exception as errore:
         print(errore)
         return jsonify({"errore": "Errore durante la creazione dell'abbonamento"}), 500
+
+@abbonamento_bp.route("/abbonamenti", methods=["GET"])
+def getAbbonamenti():
+    db = Database() 
+    risultato = db.get_abbonamenti()
+    return jsonify(risultato), 200  
+
+@abbonamento_bp.route("/abbonamenti/<int:id>", methods=["GET"])
+def getAbbonamentoId(id):
+    db = Database() 
+    risultato = db.get_abbonamento_id(id)
+    if risultato is None:
+        return jsonify({"errore": "Abbonamento non trovato"}), 404
+    return jsonify(risultato), 200                

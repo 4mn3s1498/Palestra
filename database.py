@@ -273,3 +273,231 @@ class Database:
             "idScheda": idScheda,
             "idIscritto": idIscritto
         }
+#GET GET GET 
+    def get_iscritti(self):
+        with self.engine.begin() as conn:
+            risultato = conn.execute(
+                text("""
+                    SELECT *
+                    FROM iscritto
+                """)
+            )
+
+            iscritti = risultato.fetchall()
+            dto = []
+
+            for iscritto in iscritti:
+                dto.append({
+                    "idIscritto": iscritto[0],
+                    "nome": iscritto[1],
+                    "cognome": iscritto[2],
+                    "dataNascita": iscritto[3]
+                })
+
+        return dto
+
+    def get_iscrittoId(self, id):
+        with self.engine.begin() as conn:
+            risultato = conn.execute(
+                text("""
+                    SELECT *
+                    FROM iscritto
+                    WHERE idiscritto = :id
+                """),
+                {"id": id}
+            )
+
+            iscritto = risultato.fetchone()
+
+            if iscritto is None:
+                return None
+
+            return {
+                "idIscritto": iscritto[0],
+                "nome": iscritto[1],
+                "cognome": iscritto[2],
+                "dataNascita": iscritto[3]
+            }
+
+    def get_allenatori(self):
+        with self.engine.begin() as conn:
+            risultato = conn.execute(
+                text("""
+                    SELECT *
+                    FROM allenatore
+                """)
+            )
+
+            allenatori = risultato.fetchall()
+            dto = []
+
+            for allenatore in allenatori:
+                dto.append({
+                    "idAllenatore": allenatore[0],
+                    "nome": allenatore[1],
+                    "cognome": allenatore[2],
+                    "dataNascita": allenatore[3],
+                    "compenso": allenatore[4]
+                })
+
+        return dto
+    def get_allenatore_id(self, id):
+        with self.engine.begin() as conn:
+            risultato = conn.execute(
+                text("""
+                    SELECT *
+                    FROM allenatore
+                    WHERE idAllenatore = :id
+                """),
+                {"id": id}
+            )
+
+            allenatore = risultato.fetchone()
+
+            if allenatore is None:
+                return None
+
+            return {
+                "idAllenatore": allenatore[0],
+                "nome": allenatore[1],
+                "cognome": allenatore[2],
+                "dataNascita": allenatore[3],
+                "compenso": allenatore[4]
+            }
+
+    def get_macchinari(self):
+        with self.engine.begin() as conn:
+            risultato = conn.execute(
+                text("""
+                    SELECT *
+                    FROM macchinario
+                """)
+            )
+
+            macchinari = risultato.fetchall()
+            dto = []
+
+            for macchinario in macchinari:
+                dto.append({
+                    "idMacchinario": macchinario[0],
+                    "anno": macchinario[1],
+                    "dataManutenzione": macchinario[2],
+                    "stato": macchinario[3]
+                })
+
+            return dto
+
+    def get_macchinario_id(self, id):
+        with self.engine.begin() as conn:
+            risultato = conn.execute(
+                text("""
+                    SELECT *
+                    FROM macchinario
+                    WHERE idMacchinario = :id
+                """),
+                {"id": id}
+            )
+
+            macchinario = risultato.fetchone()
+
+            if macchinario is None:
+                return None
+
+            return {
+                "idMacchinario": macchinario[0],
+                "anno": macchinario[1],
+                "dataManutenzione": macchinario[2],
+                "stato": macchinario[3]
+            }
+
+    def get_abbonamenti(self):
+        with self.engine.begin() as conn:
+            risultato = conn.execute(
+                text("""
+                    SELECT *
+                    FROM abbonamento
+                """)
+            )
+
+            abbonamenti = risultato.fetchall()
+            dto = []
+
+            for abbonamento in abbonamenti:
+                dto.append({
+                    "idAbbonamenti": abbonamento[0],
+                    "tipo": abbonamento[1],
+                    "dataScadenza": abbonamento[2],
+                    "idIscritto": abbonamento[3]
+                })
+
+            return dto
+
+    def get_abbonamento_id(self, id):
+        with self.engine.begin() as conn:
+            risultato = conn.execute(
+                text("""
+                    SELECT *
+                    FROM abbonamento
+                    WHERE idAbbonamento = :id
+                """),
+                {"id": id}
+            )
+
+            abbonamento = risultato.fetchone()
+
+            if abbonamento is None:
+                return None
+
+            return {
+                "idAbbonamenti": abbonamento[0],
+                "tipo": abbonamento[1],
+                "dataScadenza": abbonamento[2],
+                "idIscritto": abbonamento[3]
+            }
+            
+    def get_turni(self):
+        with self.engine.begin() as conn:
+            risultato = conn.execute(
+                text("""
+                    SELECT *
+                    FROM turno
+                """)
+            )
+
+            turni = risultato.fetchall()
+            dto = []
+
+            for turno in turni:
+                dto.append({
+                    "idTurno": turno[0],
+                    "giorno": turno[1],
+                    "oraInizio": turno[2].isoformat(),
+                    "oraFine": turno[3].isoformat(),
+                    "idAllenatore": turno[4]
+                })
+
+            return dto
+
+    def get_turno_id(self, id):
+        with self.engine.begin() as conn:
+            risultato = conn.execute(
+                text("""
+                    SELECT *
+                    FROM turno
+                    WHERE idTurno = :id
+                """),
+                {"id": id}
+            )
+
+            turno= risultato.fetchone()
+
+            if turno is None:
+                return None
+
+            return {
+                "idTurno": turno[0],
+                "giorno": turno[1],
+                "oraInizio": turno[2].isoformat(), 
+                "oraFine": turno[3].isoformat(), 
+                "idAllenatore": turno[4]
+            }
