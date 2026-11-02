@@ -34,3 +34,19 @@ def assegnazioneScheda():
         return jsonify({
             "errore": "Errore durante l'assegnazione della scheda"
         }), 500
+
+@assegnazioneSchede_bp.route("/assegnazioneSchede", methods=["GET"])
+def getAssegnazioneSchede():
+    db = Database() 
+    risultato = db.get_assegnazioneSchede()
+    return jsonify(risultato), 200  
+
+@assegnazioneSchede_bp.route("/assegnazioneSchede/<int:idScheda>/<int:idIscritto>", methods=["GET"])
+def getAssegnazioneSchedeId(idScheda, idIscritto):
+    db = Database()
+    risultato = db.get_assegnazione_schede_id(idScheda, idIscritto)
+
+    if risultato is None:
+        return jsonify({"errore": "Assegnazione Scheda non trovata"}), 404
+
+    return jsonify(risultato), 200

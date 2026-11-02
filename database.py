@@ -454,7 +454,7 @@ class Database:
                 "dataScadenza": abbonamento[2],
                 "idIscritto": abbonamento[3]
             }
-            
+     #turni       
     def get_turni(self):
         with self.engine.begin() as conn:
             risultato = conn.execute(
@@ -500,4 +500,94 @@ class Database:
                 "oraInizio": turno[2].isoformat(), 
                 "oraFine": turno[3].isoformat(), 
                 "idAllenatore": turno[4]
+            }
+    def get_schede(self):
+        with self.engine.begin() as conn:
+            risultato = conn.execute(
+                text("""
+                    SELECT *
+                    FROM scheda
+                """)
+            )
+
+            schede = risultato.fetchall()
+            dto = []
+
+            for scheda in schede:
+                dto.append({
+                    "idScheda":scheda[0],
+                    "nome" : scheda[1],
+                    "livello" : scheda[2],
+                    "idAllenatore" : scheda[3]
+                })
+
+            return dto
+
+    def get_schede_id(self, id):
+        with self.engine.begin() as conn:
+            risultato = conn.execute(
+                text("""
+                    SELECT *
+                    FROM scheda
+                    WHERE idScheda = :id
+                """),
+                {"id": id}
+            )
+
+            scheda= risultato.fetchone()
+
+            if scheda is None:
+                return None
+
+            return {
+                "idScheda":scheda[0],
+                "nome" : scheda[1],
+                "livello" : scheda[2],
+                "idAllenatore" : scheda[3]
+            }
+     
+    # assegnazioneSchede
+    def get_assegnazioneSchede(self):
+        with self.engine.begin() as conn:
+            risultato = conn.execute(
+                text("""
+                    SELECT *
+                    FROM AssegnazioneScheda
+                """)
+            )
+
+            assegnazioni = risultato.fetchall()
+            dto = []
+
+            for assegnazione in assegnazioni:
+                dto.append({
+                    "idScheda": assegnazione[0],
+                    "idIscritto": assegnazione[1]
+                })
+
+            return dto
+
+    def get_assegnazione_schede_id(self, idScheda, idIscritto):
+        with self.engine.begin() as conn:
+            risultato = conn.execute(
+                text("""
+                    SELECT *
+                    FROM AssegnazioneScheda
+                    WHERE idScheda = :idScheda
+                    AND idIscritto = :idIscritto
+                """),
+                {
+                    "idScheda": idScheda,
+                    "idIscritto": idIscritto
+                }
+            )
+
+            assegnazione = risultato.fetchone()
+
+            if assegnazione is None:
+                return None
+
+            return {
+                "idScheda": assegnazione[0],
+                "idIscritto": assegnazione[1]
             }

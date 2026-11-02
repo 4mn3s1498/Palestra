@@ -35,3 +35,17 @@ def scheda():
         return jsonify({
             "errore": "Errore durante la creazione della scheda"
         }), 500
+
+@schede_bp.route("/schede", methods=["GET"])
+def getSchede():
+    db = Database() 
+    risultato = db.get_schede()
+    return jsonify(risultato), 200  
+
+@schede_bp.route("/schede/<int:id>", methods=["GET"])
+def getSchedeId(id):
+    db = Database() 
+    risultato = db.get_schede_id(id)
+    if risultato is None:
+        return jsonify({"errore": "Scheda non trovata"}), 404
+    return jsonify(risultato), 200   
