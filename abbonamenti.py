@@ -44,3 +44,12 @@ def getAbbonamentoId(id):
     if risultato is None:
         return jsonify({"errore": "Abbonamento non trovato"}), 404
     return jsonify(risultato), 200                
+
+@abbonamento_bp.route("/abbonamenti/<int:id>", methods=["DELETE"])
+def deleteAbbonamento(id):
+    db= Database ()
+    risultato= db.deleteAbbonamento(id)
+    if risultato == 0:
+        return "Nessuna riga eliminata", 404
+    else:
+        return "", 204

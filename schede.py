@@ -1,5 +1,6 @@
 from flask import Blueprint, request, jsonify
 from database import Database
+from sqlalchemy.exc import IntegrityError
 
 schede_bp = Blueprint("scheda", __name__)
 
@@ -48,4 +49,16 @@ def getSchedeId(id):
     risultato = db.get_schede_id(id)
     if risultato is None:
         return jsonify({"errore": "Scheda non trovata"}), 404
-    return jsonify(risultato), 200   
+    return jsonify(risultato), 200  
+    
+@schede_bp.route("/schede/<int:id>", methods=["DELETE"])
+def deleteScheda(id):
+    db=Database()
+    try:
+        risultato=db.deleteScheda(id)
+        if risultato == 0:
+            return "nessuna riga eliminata",404
+        else:
+            return "",204   
+    except IntegrityError:
+        return "conflitto chiave esterna",409     

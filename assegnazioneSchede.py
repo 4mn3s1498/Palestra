@@ -50,3 +50,16 @@ def getAssegnazioneSchedeId(idScheda, idIscritto):
         return jsonify({"errore": "Assegnazione Scheda non trovata"}), 404
 
     return jsonify(risultato), 200
+
+
+@assegnazioneSchede_bp.route("/assegnazioneSchede/<int:idScheda>/<int:idIscritto>", methods=["DELETE"])
+def deleteAssegnazioneSchede(idScheda, idIscritto):
+    db = Database()
+    risultato = db.deleteAssegnazioneSchede(idIscritto, idScheda)
+
+    if risultato == 0:
+        return "Nessuna riga eliminata", 404
+    else:
+        return "", 204
+
+        

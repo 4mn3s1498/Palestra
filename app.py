@@ -8,6 +8,7 @@ from abbonamenti import abbonamento_bp
 from turni import turno_bp
 from schede import schede_bp
 from assegnazioneSchede import assegnazioneSchede_bp
+from sqlalchemy.exc import IntegrityError
 
 app = Flask(__name__)
 app.register_blueprint(iscritti_bp)

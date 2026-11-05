@@ -591,3 +591,88 @@ class Database:
                 "idScheda": assegnazione[0],
                 "idIscritto": assegnazione[1]
             }
+    def deleteAssegnazioneSchede(self, idIscritto, idScheda):
+        with self.engine.begin() as conn:
+            risultato = conn.execute(
+                text("""
+                    DELETE FROM AssegnazioneScheda
+                    WHERE idIscritto = :idIscritto
+                    AND idScheda = :idScheda;
+                """),
+                {
+                    "idIscritto": idIscritto,
+                    "idScheda": idScheda
+                }
+            )
+
+        return risultato.rowcount
+
+    def deleteAbbonamento(self, id):    
+        with self.engine.begin() as conn:
+            risultato = conn.execute(
+                text("""
+                     DELETE FROM ABBONAMENTO
+                     WHERE idAbbonamento = :id
+                     """),
+                     {
+                      "id":id
+                     })
+            return risultato.rowcount
+
+    def deleteTurno(self,id):
+       with self.engine.begin() as conn:
+            risultato = conn.execute(
+                text("""
+                DELETE FROM TURNO
+                WHERE idTurno= :id
+                """),
+                {
+                    "id":id
+                })         
+            return risultato.rowcount  
+
+    def deleteScheda(self,id):
+       with self.engine.begin() as conn:
+            risultato = conn.execute(
+                text("""
+                DELETE FROM SCHEDA
+                WHERE idScheda= :id
+                """),
+                {
+                    "id":id
+                })         
+            return risultato.rowcount             
+
+    def deleteMacchinario(self,id):
+       with self.engine.begin() as conn:
+            risultato = conn.execute(
+                text("""
+                DELETE FROM MACCHINARIO
+                WHERE idMacchinario= :id
+                """),
+                {
+                    "id":id
+                })         
+            return risultato.rowcount
+
+    def deleteIscritto(self,id):
+        with self.engine.begin() as conn:
+            risultato=conn.execute(
+                text(""" 
+                DELETE FROM ISCRITTO
+                WHERE idIscritto = :id
+                """),
+                { "id" : id}
+            )
+            return risultato.rowcount     
+
+    def deleteAllenatore(self,id):
+        with self.engine.begin() as conn:
+            risultato=conn.execute(
+                text(""" 
+                DELETE FROM ALLENATORE
+                WHERE idAllenatore = :id
+                """),
+                { "id" : id}
+            )
+            return risultato.rowcount                                 

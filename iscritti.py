@@ -1,6 +1,7 @@
 
 from flask import Blueprint, request, jsonify
 from database import Database
+from sqlalchemy.exc import IntegrityError
 
 iscritti_bp = Blueprint("iscritti", __name__)
 
@@ -41,3 +42,16 @@ def getIscritto(id):
         return jsonify({"errore": "Iscritto non trovato"}), 404
 
     return jsonify(risultato), 200
+
+@iscritti_bp.route("/iscritti/<int:id>", methods=["DELETE"])
+def deleteIscritto(id):    
+    db=Database()
+    try:
+        risultato = db.deleteIscritto(id)
+        if risultato == 0:
+            return "nessuna riga eliminata",404
+        else:
+            return "",204
+    except IntegrityError:
+            return "conflitto chiave esterna",409            
+

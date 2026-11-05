@@ -40,3 +40,12 @@ def getMacchinarioId(id):
     if risultato is None:
         return jsonify({"errore": "Macchinario non trovato"}), 404
     return jsonify(risultato), 200        
+
+@macchinario_bp.route("/macchinari/<int:id>", methods=["DELETE"])
+def deleteMacchinario(id):
+    db=Database()
+    risultato=db.deleteMacchinario(id) 
+    if risultato == 0:
+        return "Nessuna riga eliminata",404
+    else:
+        return "",204      

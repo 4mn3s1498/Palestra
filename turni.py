@@ -51,3 +51,12 @@ def getTurnoId(id):
     if risultato is None:
         return jsonify({"errore": "Turno non trovato"}), 404
     return jsonify(risultato), 200   
+
+@turno_bp.route("/turni/<int:id>", methods=["DELETE"]) 
+def deleteTurno(id):
+    db=Database()
+    risultato=db.deleteTurno(id)
+    if risultato == 0:
+        return "Nessuna riga eliminata", 404
+    else:
+        return "", 204 
