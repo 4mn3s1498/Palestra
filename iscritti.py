@@ -55,3 +55,27 @@ def deleteIscritto(id):
     except IntegrityError:
             return "conflitto chiave esterna",409            
 
+@iscritti_bp.route("/iscritti/<int:id>", methods=["PUT"])
+def updateIscritto(id):
+    dati = request.get_json()
+
+    if dati is None:
+        return "Nessun dato ricevuto", 400
+
+    db = Database()
+    try:
+        risultato = db.updateIscritto(id, dati)
+
+        if risultato is None:
+            return "Nessuna riga modificata", 404
+        else:
+            dto = {
+                "idIscritto": id,
+                "nome": risultato._mapping["nome"],
+                "cognome": risultato._mapping["cognome"],
+                "dataNascita": risultato._mapping["datanascita"]
+            }
+            return jsonify(dto), 200
+
+    except IntegrityError:
+        return "Conflitto chiave esterna", 409

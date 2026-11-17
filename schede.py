@@ -62,3 +62,5 @@ def deleteScheda(id):
             return "",204   
     except IntegrityError:
         return "conflitto chiave esterna",409     
+
+

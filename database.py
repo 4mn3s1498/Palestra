@@ -591,6 +591,7 @@ class Database:
                 "idScheda": assegnazione[0],
                 "idIscritto": assegnazione[1]
             }
+ #DELETEE DLT
     def deleteAssegnazioneSchede(self, idIscritto, idScheda):
         with self.engine.begin() as conn:
             risultato = conn.execute(
@@ -675,4 +676,124 @@ class Database:
                 """),
                 { "id" : id}
             )
-            return risultato.rowcount                                 
+            return risultato.rowcount    
+
+    def updateIscritto(self,id,dati):
+        with self.engine.begin() as conn:
+            risultato=conn.execute(
+                text("""
+                    UPDATE ISCRITTO
+                    SET nome=:nome,
+                         cognome=:cognome,
+                         dataNascita= :dataNascita
+                    WHERE idIscritto= :id
+                    RETURNING *
+                    """
+                ),
+                 {
+                     "id": id,
+                     "nome": dati["nome"],
+                     "cognome": dati["cognome"],
+                    "dataNascita": dati["dataNascita"]
+                 }                                  
+            )  
+            ris=risultato.fetchone()
+            return ris
+ #UPDATE UPDT            
+    def updateAllenatore(self,id,dati):
+        with self.engine.begin() as conn:
+            risultato=conn.execute(
+                text("""
+                    UPDATE ALLENATORE
+                    SET nome=:nome,
+                         cognome=:cognome,
+                         dataNascita= :dataNascita,
+                         compenso= :compenso
+                    WHERE idAllenatore= :id
+                    RETURNING *
+                    """
+                ),
+                 {
+                     "id": id,
+                     "nome": dati["nome"],
+                     "cognome": dati["cognome"],
+                     "dataNascita": dati["dataNascita"],
+                     "compenso": dati["compenso"]
+                 }                                  
+            )  
+            ris=risultato.fetchone()
+            return ris
+
+    def updateMacchinario(self,id,dati):
+        with self.engine.begin() as conn:
+            risultato=conn.execute(
+                text("""
+                    UPDATE MACCHINARIO
+                    SET anno=:anno,
+                       dataUltimaManutenzione = :dataManutenzione,
+                        stato= :stato
+                    WHERE idMacchinario= :id
+                    RETURNING *
+                    """
+                ),
+                 {
+                     "id": id,
+                     "anno": dati["anno"],
+                     "dataManutenzione": dati["dataManutenzione"],
+                     "stato": dati["stato"],
+                 }                                  
+            )  
+            ris=risultato.fetchone()
+            return ris
+                                      
+    def updateAbbonamento(self, id, dati):
+        with self.engine.begin() as conn:
+            risultato = conn.execute(
+                text("""
+                    UPDATE ABBONAMENTO
+                    SET tipo = :tipo,
+                    dataScadenza = :dataScadenza,
+                    idIscritto = :idIscritto
+                    WHERE idAbbonamento = :id
+                    RETURNING *
+            """),
+            {
+                "id": id,
+                "tipo": dati["tipo"],
+                "dataScadenza": dati["dataScadenza"],
+                "idIscritto": dati["idIscritto"]
+            }
+        )
+
+        ris = risultato.fetchone()
+
+        if ris is None:
+            return None
+
+        return ris
+
+def updateAbbonamento(self, id, dati):
+        with self.engine.begin() as conn:
+            risultato = conn.execute(
+                text("""
+                    UPDATE ABBONAMENTO
+                    SET tipo = :tipo,
+                    dataScadenza = :dataScadenza,
+                    idIscritto = :idIscritto
+                    WHERE idAbbonamento = :id
+                    RETURNING *
+            """),
+            {
+                "id": id,
+                "tipo": dati["tipo"],
+                "dataScadenza": dati["dataScadenza"],
+                "idIscritto": dati["idIscritto"]
+            }
+        )
+
+        ris = risultato.fetchone()
+
+        if ris is None:
+            return None
+
+        return ris       
