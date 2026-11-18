@@ -1,6 +1,6 @@
-
 from flask import Blueprint, request, jsonify
 from database import Database
+from sqlalchemy.exc import IntegrityError
 
 turno_bp = Blueprint("turno", __name__)
 
@@ -60,3 +60,28 @@ def deleteTurno(id):
         return "Nessuna riga eliminata", 404
     else:
         return "", 204 
+
+@turno_bp.route("/turni/<int:id>", methods=["PUT"])
+def updateTurno(id):
+    dati = request.get_json()
+    if dati is None:
+        return "Nessun dato ricevuto", 400
+    db = Database()
+    try:
+        risultato = db.updateTurno(id, dati)
+        if risultato is None:
+            return "Nessuna riga modificata", 404
+        else:
+            dto = {
+                "idTurno": id,
+                "giorno": risultato._mapping["giorno"],
+                "oraInizio":risultato._mapping["orainizio"].isoformat(),
+                "oraFine":risultato._mapping["orafine"].isoformat(),
+                "idAllenatore": risultato._mapping["idallenatore"],
+              
+            }
+            return jsonify(dto), 200
+    except IntegrityError:
+        return "Conflitto chiave esterna", 409    
+
+           

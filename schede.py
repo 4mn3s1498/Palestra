@@ -64,3 +64,24 @@ def deleteScheda(id):
         return "conflitto chiave esterna",409     
 
 
+@schede_bp.route("/schede/<int:id>", methods=["PUT"])
+def updateScheda(id):
+    dati = request.get_json()
+    if dati is None:
+        return "Nessun dato ricevuto", 400
+    db = Database()
+    try:
+        risultato = db.updateScheda(id, dati)
+        if risultato is None:
+            return "Nessuna riga modificata", 404
+        else:
+            dto = {
+                "idScheda": id,
+                "nome": risultato._mapping["nome"],
+                "livello":risultato._mapping["livello"],
+                "idAllenatore": risultato._mapping["idallenatore"],
+              
+            }
+            return jsonify(dto), 200
+    except IntegrityError:
+        return "Conflitto chiave esterna", 409    

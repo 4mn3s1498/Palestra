@@ -58,28 +58,21 @@ def deleteAbbonamento(id):
 @abbonamento_bp.route("/abbonamenti/<int:id>", methods=["PUT"])
 def updateAbbonamento(id):
     dati = request.get_json()
-
     if dati is None:
         return "Nessun dato ricevuto", 400
-
     db = Database()
-
     try:
         risultato = db.updateAbbonamento(id, dati)
-
         if risultato is None:
             return "Nessuna riga modificata", 404
-
         else:
             dto = {
                 "idAbbonamento": id,
                 "tipo": risultato._mapping["tipo"],
                 "dataScadenza":risultato._mapping["datascadenza"],
                 "idIscritto": risultato._mapping["idiscritto"],
-                
+              
             }
-
             return jsonify(dto), 200
-
     except IntegrityError:
         return "Conflitto chiave esterna", 409        

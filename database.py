@@ -772,28 +772,50 @@ class Database:
 
         return ris
 
-def updateAbbonamento(self, id, dati):
+    def updateTurno(self, id, dati):
         with self.engine.begin() as conn:
             risultato = conn.execute(
                 text("""
-                    UPDATE ABBONAMENTO
-                    SET tipo = :tipo,
-                    dataScadenza = :dataScadenza,
-                    idIscritto = :idIscritto
-                    WHERE idAbbonamento = :id
+                    UPDATE TURNO
+                    SET giorno = :giorno,
+                    oraInizio = :oraInizio,
+                    oraFine = :oraFine,
+                    idAllenatore= :idAllenatore
+                    WHERE idTurno = :id
                     RETURNING *
             """),
             {
                 "id": id,
-                "tipo": dati["tipo"],
-                "dataScadenza": dati["dataScadenza"],
-                "idIscritto": dati["idIscritto"]
+                "giorno": dati["giorno"],
+                "oraInizio": dati["oraInizio"],
+                "oraFine": dati["oraFine"],
+                "idAllenatore": dati["idAllenatore"]
             }
         )
-
         ris = risultato.fetchone()
-
         if ris is None:
             return None
-
         return ris       
+
+    def updateScheda(self, id, dati):
+        with self.engine.begin() as conn:
+            risultato = conn.execute(
+                text("""
+                    UPDATE SCHEDA
+                    SET nome = :nome,
+                    livello = :livello,
+                    idAllenatore= :idAllenatore
+                    WHERE idScheda = :id
+                    RETURNING *
+            """),
+            {
+                "id": id,
+                "nome": dati["nome"],
+                "livello": dati["livello"],
+                "idAllenatore": dati["idAllenatore"]
+            }
+        )
+        ris = risultato.fetchone()
+        if ris is None:
+            return None
+        return ris            
