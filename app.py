@@ -31,4 +31,7 @@ def test_connession():
     return "connessione fallita", 500
 
 if __name__ == "__main__":
+    db = Database()
+
     app.run(debug=True)
+   

@@ -79,3 +79,14 @@ def updateIscritto(id):
 
     except IntegrityError:
         return "Conflitto chiave esterna", 409
+
+@iscritti_bp.route('/iscritti/<int:idIscritto>/abbonamenti', methods=['GET'])
+def getIscrAbb(idIscritto):
+    db = Database() 
+    risultato = db.get_iscrittoId(idIscritto)
+    if risultato is None:
+        return jsonify({"errore": "Iscritto non trovato"}), 404
+        
+    abbonamenti = db.getIscrAbb(idIscritto)
+
+    return jsonify(abbonamenti), 200

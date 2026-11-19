@@ -819,3 +819,31 @@ class Database:
         if ris is None:
             return None
         return ris            
+
+    def getIscrAbb(self, idIscritto):
+        with self.engine.begin() as conn:
+            risultato = conn.execute(
+                text("""
+                    SELECT *
+                    FROM ABBONAMENTO
+                    WHERE idIscritto = :idIscritto
+                """),
+                {
+                "idIscritto": idIscritto
+                }
+            )
+
+        righe = risultato.fetchall()
+        dto = []
+
+        for abbonamento in righe:
+            dto.append({
+                "idAbbonamenti": abbonamento[0],
+                "tipo": abbonamento[1],
+                "dataScadenza": abbonamento[2],
+               "idIscritto": abbonamento[3]
+        })
+
+        return dto
+
+     
