@@ -1,0 +1,14 @@
+
+# File Python generati automaticamente
+__pycache__/
+*.py[cod]
+
+# Ambienti virtuali
+venv/
+.venv/
+
+# File di configurazione e segreti
+.env
+
+# File temporanei
+*.log
