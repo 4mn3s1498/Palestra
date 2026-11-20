@@ -1,4 +1,3 @@
-
 from flask import Blueprint, request, jsonify
 from database import Database
 from sqlalchemy.exc import IntegrityError
@@ -90,3 +89,15 @@ def getIscrAbb(idIscritto):
     abbonamenti = db.getIscrAbb(idIscritto)
 
     return jsonify(abbonamenti), 200
+
+@iscritti_bp.route('/iscritti/<int:idIscritto>/scheda', methods=['GET'])
+def getIscSchd(idIscritto):
+    db = Database() 
+    risultato = db.get_iscrittoId(idIscritto)
+    if risultato is None:
+        return jsonify({"errore": "Iscritto non trovato"}), 404
+        
+    schede = db.getIscSchd(idIscritto)
+
+    return jsonify(schede), 200
+

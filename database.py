@@ -819,7 +819,7 @@ class Database:
         if ris is None:
             return None
         return ris            
-
+#SELECT PLUS 
     def getIscrAbb(self, idIscritto):
         with self.engine.begin() as conn:
             risultato = conn.execute(
@@ -846,4 +846,84 @@ class Database:
 
         return dto
 
-     
+    def getAllTrn(self, idAllenatore):
+        with self.engine.begin() as conn:
+            risultato = conn.execute(
+                text("""
+                    SELECT *
+                    FROM TURNO
+                    WHERE idAllenatore = :idAllenatore
+                    ORDER BY giorno, oraInizio
+                """),
+                {
+                "idAllenatore": idAllenatore
+                }
+            )
+
+        righe = risultato.fetchall()
+        dto = []
+
+        for turno in righe:
+            dto.append({
+                "idTurno": turno[0],
+                "giorno": turno[1],
+                "oraInizio": turno[2].isoformat(),
+                "oraFine": turno[3].isoformat(),
+               "idAllenatore": turno[4]
+        })
+
+        return dto
+
+    def getIscSchd(self, idIscritto):
+        with self.engine.begin() as conn:
+            risultato = conn.execute(
+                text("""
+                    SELECT *
+                    FROM ASSEGNAZIONESCHEda
+                    JOIN SCHEDA
+                    ON ASSEGNAZIONESCHEda.idScheda = SCHEDA.idScheda
+                    WHERE ASSEGNAZIONESCHEda.idIscritto = :idIscritto
+                """),
+                {
+                "idIscritto": idIscritto
+                }
+            )
+
+        righe = risultato.fetchall()
+        dto = []
+
+        for scheda in righe:
+            dto.append({
+                "idScheda": scheda[0],
+                "nome": scheda[1],
+                "livello": scheda[2],
+               "idAllenatore": scheda[3]
+        })
+
+        return dto
+
+    def getAbbScad(self, dataScadenza):
+        with self.engine.begin() as conn:
+            risultato = conn.execute(
+                text("""
+                    SELECT *
+                    FROM ABBONAMENTO
+                    WHERE dataScadenza <= :data
+                """),
+                {
+                "data": dataScadenza
+                }
+            )
+
+        righe = risultato.fetchall()
+        dto = []
+
+        for abbonamento in righe:
+            dto.append({
+                "idAbbonamento": abbonamento[0],
+                "tipo": abbonamento[1],
+                "dataScadenza": abbonamento[2],
+               "idIscritto": abbonamento[3]
+        })
+
+        return dto    

@@ -91,3 +91,16 @@ def updateAllenatore(id):
 
     except IntegrityError:
         return "Conflitto chiave esterna", 409
+
+
+@allenatore_bp.route("/allenatori/<int:id>/turni", methods=["GET"])
+def getAllTrn(id):
+    db = Database()
+    risultato = db.get_allenatore_id(id)
+
+    if risultato is None:
+        return jsonify({"errore": "Allenatore non trovato"}), 404
+
+    
+    ris=db.getAllTrn(id)
+    return jsonify(ris), 200

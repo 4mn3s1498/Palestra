@@ -76,3 +76,12 @@ def updateAbbonamento(id):
             return jsonify(dto), 200
     except IntegrityError:
         return "Conflitto chiave esterna", 409        
+
+@abbonamento_bp.route("/abbonamenti/in-scadenza", methods=["GET"])
+def getAbbScad():
+    db = Database()  
+    data = request.args.get("data")      
+    risultato = db.getAbbScad(data)
+    if risultato is None:
+        return jsonify({"errore": "Data non trovata"}), 404
+    return jsonify(risultato), 200    

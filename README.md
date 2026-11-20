@@ -31,9 +31,9 @@ Il backend espone endpoint REST per consultare e gestire i dati del gestionale.
 Esempi:
 
 - `GET /iscritti`
-- `GET /iscritti/<id>`
+- `DELETE /iscritti/<id>`
 - `GET /iscritti/<id>/abbonamenti`
-- `GET /allenatori/<id>/turni`
+- `POST /schede/<id>`
 
 ## Database
 
